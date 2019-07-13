@@ -31,8 +31,11 @@ public class TypeParameterResolver {
      * 解析属性类型
      */
     public static Type resolveFieldType(Field field, Type srcType) {
+        // 获取字段的声明类型
         Type fieldType = field.getGenericType();
+        // 获取字段定义所在的类的Class对象
         Class<?> declaringClass = field.getDeclaringClass();
+        // 调用resolveType方法 进行后续处理
         return resolveType(fieldType, srcType, declaringClass);
     }
 
@@ -72,10 +75,13 @@ public class TypeParameterResolver {
      */
     private static Type resolveType(Type type, Type srcType, Class<?> declaringClass) {
         if (type instanceof TypeVariable) {
+            // 解析TypeVariable 类型 TypeVariable 表示类型变量，例如List<T> T就是类型变量，所以这个主要是解析 T field 这种变量
             return resolveTypeVar((TypeVariable<?>) type, srcType, declaringClass);
         } else if (type instanceof ParameterizedType) {
+            // 解析 ParameterizedType 类型，ParameterizedType 表示参数化类型，例如List<String> Map<Integer, String> 都是参数化类型
             return resolveParameterizedType((ParameterizedType) type, srcType, declaringClass);
         } else if (type instanceof GenericArrayType) {
+            // 解析 GenericArrayType 类型， GenericArrayType 表示数组类型且组成元素是 ParameterizedType 或 TypeVariable 这个类型只有一个方法，返回数组的组成元素。
             return resolveGenericArrayType((GenericArrayType) type, srcType, declaringClass);
         } else {
             return type;
@@ -152,6 +158,7 @@ public class TypeParameterResolver {
         }
 
         if (clazz == declaringClass) {
+            // 获取 TypeVariable 的上届
             Type[] bounds = typeVar.getBounds();
             if (bounds.length > 0) {
                 return bounds[0];
