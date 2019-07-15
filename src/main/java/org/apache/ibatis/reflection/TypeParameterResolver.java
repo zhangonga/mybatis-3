@@ -20,6 +20,29 @@ import java.util.Arrays;
 
 /**
  * 参数解析器
+ * 所有的class都有一个Class对象
+ * 所有的变量都有 Type 类型
+ * Type 子接口有 Class , ParameterizedType, WildcardType , TypeVariable , GenericArrayType
+ * class 表示类
+ * ParameterizedType 表示参数化类型 例如 List<? extends String > , Map<Integer, String> , Set<String>  等等
+ *
+ * WildcardType 表示泛型类型， 例如 List<T ? extends String > 里的 T 就是泛型类型
+ *      通过 paramType.getActualTypeArguments()[0] instanceof WildcardType 判断
+ *      WildcardType wildcard = (WildcardType) paramType.getActualTypeArguments()[0];
+ *      wildcard 可以知道变量的上限，下限
+ *
+ * GenericArrayType 类型， GenericArrayType 表示数组类型且组成元素是 ParameterizedType 或 TypeVariable 这个类型只有一个方法，返回数组的组成元素。
+ *      例如 String[]
+ *
+ * TypeVariable 表示类型变量，例如List<T> T就是类型变量，所以这个主要是解析 T field 这种变量
+ *
+ * <![data[
+ * WildcardType 和 TypeVariable 的区别
+ *  例如一个字段， 它的类型是 List<String> 那这个类型就是 ParameterizedType 类型
+ *  再例如一个字段， 它的类型是 List<? extends String> 那这个类型就还是 ParameterizedType 但是 ? extends String 是  WildcardType
+ *  再例如一个字段， 它的类型是 T ， 那这个类型就是 TypeVariable
+ *  再例如一个字段， 它的类型是 String[] ， 那这个类型就是 GenericArrayType
+ * ]]
  *
  * @author Iwao AVE!
  */
