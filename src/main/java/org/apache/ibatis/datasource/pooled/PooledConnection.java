@@ -113,6 +113,7 @@ class PooledConnection implements InvocationHandler {
             return null;
         }
         try {
+            // Declaring n 宣告行为，说明 v 说明
             if (!Object.class.equals(method.getDeclaringClass())) {
                 // issue #579 toString() should never fail
                 // throw an SQLException instead of a Runtime
