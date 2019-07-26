@@ -439,6 +439,7 @@ public final class TypeHandlerRegistry {
     public void register(Class<?> typeHandlerClass) {
         boolean mappedTypeFound = false;
         // <1> 获得 @MappedTypes 注解
+        // 参考Long 的 TypeHandler
         MappedTypes mappedTypes = typeHandlerClass.getAnnotation(MappedTypes.class);
         if (mappedTypes != null) {
             // 遍历注解的 Java Type 数组，逐个进行注册

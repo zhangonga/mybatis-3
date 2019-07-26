@@ -138,12 +138,14 @@ public class TypeAliasRegistry {
      */
     public void registerAliases(String packageName, Class<?> superType) {
         ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<>();
+        // 这一步就把所有符合条件的类放入到 resolverUtil 对象的 matches 变量中了
         resolverUtil.find(new ResolverUtil.IsA(superType), packageName);
+        // 获取所有的类，其实就是放 matches 用 Set 来进行去重
         Set<Class<? extends Class<?>>> typeSet = resolverUtil.getClasses();
         for (Class<?> type : typeSet) {
             // Ignore inner classes and interfaces (including package-info.java)
             // Skip also inner classes. See issue #6
-            // // 排除匿名类 排除接口 排除接口
+            // // 排除匿名类 排除接口 排除内部类
             if (!type.isAnonymousClass() && !type.isInterface() && !type.isMemberClass()) {
                 registerAlias(type);
             }

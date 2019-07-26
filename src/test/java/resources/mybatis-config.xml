@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!--是否开启缓存-->
+        <setting name="cacheEnabled" value="true"/>
+        <!--是否开启懒加载，如果为false，所有的关联都会初始化加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--允许JDBC 生成主键。需要驱动器支持。如果设为了true，这个设置将强制使用被生成的主键，有一些驱动器不兼容不过仍然可以执行，默认false-->
+        <setting name="useGeneratedKeys" value="false"/>
+        <!--指定 MyBatis 如何自动映射 数据基表的列 NONE：不隐射　PARTIAL:部分  FULL:全部  default：PARTIAL-->
+        <setting name="autoMappingBehavior" value="PARTIAL"/>
+        <!--是否启用 行内嵌套语句 default:false-->
+        <setting name="safeRowBoundsEnabled" value="false"/>
+        <!--是否启用数据中 A_column 自动映射 到 Java类中驼峰命名的属性 default:false-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--设置本地缓存范围 session:就会有数据的共享  statement:语句范围 (这样就不会有数据的共享 ) default:session-->
+        <setting name="localCacheScope" value="SESSION"/>
+        <!--设置但JDBC类型为空时,某些驱动程序 要指定值,default:OTHER-->
+        <setting name="jdbcTypeForNull" value="OTHER"/>
+        <!--触发延迟加载的方法-->
+        <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/>
+        <!--当对象使用延迟加载时 属性的加载取决于能被引用到的那些延迟属性,否则,按需加载(需要的是时候才去加载)-->
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+
+    <plugins>
+        <plugin interceptor="com.bj58.bic.kaoqin.service.interceptor.PagerInfoInterceptor"/>
+    </plugins>
+</configuration>
