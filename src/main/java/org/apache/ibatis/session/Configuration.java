@@ -142,8 +142,11 @@ public class Configuration {
     protected final Map<String, XNode> sqlFragments = new StrictMap<>("XML fragments parsed from previous mappers");
 
     protected final Collection<XMLStatementBuilder> incompleteStatements = new LinkedList<>();
+    // 未完成的的 CacheRefs
     protected final Collection<CacheRefResolver> incompleteCacheRefs = new LinkedList<>();
+    // 不完整的 ResultMaps
     protected final Collection<ResultMapResolver> incompleteResultMaps = new LinkedList<>();
+    // 不完整的 Methods
     protected final Collection<MethodResolver> incompleteMethods = new LinkedList<>();
 
     /*
@@ -627,8 +630,11 @@ public class Configuration {
     }
 
     public void addResultMap(ResultMap rm) {
+        // 添加到 resultMaps 中
         resultMaps.put(rm.getId(), rm);
+        // 遍历全局的 ResultMap 集合，若其拥有 Discriminator 对象，则判断是否强制标记为有内嵌的 ResultMap
         checkLocallyForDiscriminatedNestedResultMaps(rm);
+        // 若传入的 ResultMap 不存在内嵌 ResultMap 并且有 Discriminator ，则判断是否需要强制表位有内嵌的 ResultMap
         checkGloballyForDiscriminatedNestedResultMaps(rm);
     }
 
@@ -857,9 +863,12 @@ public class Configuration {
     // Slow but a one time cost. A better solution is welcome.
     protected void checkLocallyForDiscriminatedNestedResultMaps(ResultMap rm) {
         if (!rm.hasNestedResultMaps() && rm.getDiscriminator() != null) {
+            // 如果传入的 ResultMap 不存在内嵌 resultMap 并且有 discriminator
             for (Map.Entry<String, String> entry : rm.getDiscriminator().getDiscriminatorMap().entrySet()) {
+                // 遍历 rm 的 discriminator 的 resultMap 集合
                 String discriminatedResultMapName = entry.getValue();
                 if (hasResultMap(discriminatedResultMapName)) {
+                    // 如果引用的 ResultMap 存在内嵌 ResultMap ，则标记传入的 ResultMap 存在内嵌 ResultMap
                     ResultMap discriminatedResultMap = resultMaps.get(discriminatedResultMapName);
                     if (discriminatedResultMap.hasNestedResultMaps()) {
                         rm.forceNestedResultMaps();
