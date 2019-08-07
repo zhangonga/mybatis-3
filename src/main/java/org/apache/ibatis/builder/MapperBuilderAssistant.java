@@ -615,12 +615,21 @@ public class MapperBuilderAssistant extends BaseBuilder {
                 nestedResultMap, notNullColumn, columnPrefix, typeHandler, flags, null, null, configuration.isLazyLoadingEnabled());
     }
 
+    /**
+     * 获取 languageDriver
+     *
+     * @param langClass
+     * @return
+     */
     public LanguageDriver getLanguageDriver(Class<? extends LanguageDriver> langClass) {
         if (langClass != null) {
+            // 如果 langClass 不为空，则注册
             configuration.getLanguageRegistry().register(langClass);
         } else {
+            // 如果为空，则获取默认的
             langClass = configuration.getLanguageRegistry().getDefaultDriverClass();
         }
+        // 获取 languageDriver
         return configuration.getLanguageRegistry().getDriver(langClass);
     }
 
