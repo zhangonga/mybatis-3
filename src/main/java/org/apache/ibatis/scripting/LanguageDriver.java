@@ -23,6 +23,13 @@ import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.session.Configuration;
 
+/**
+ * 我们可以自己定义 LanguageDriver
+ * 实现它的三个接口
+ * 在 mybatis-config.xml 中注解进来
+ * 这样就可以在 mapper.xml 中 通过 lang=myLanguageDriver
+ * 或者 mapper 接口中 通过 @Lang 注解来使用了
+ */
 public interface LanguageDriver {
 
     /**
@@ -30,7 +37,7 @@ public interface LanguageDriver {
      *
      * @param mappedStatement The mapped statement that is being executed
      * @param parameterObject The input parameter object (can be null)
-     * @param boundSql The resulting SQL once the dynamic language has been executed.
+     * @param boundSql        The resulting SQL once the dynamic language has been executed.
      * @return
      * @author Frank D. Martinez [mnesarco]
      * @see DefaultParameterHandler
@@ -42,7 +49,7 @@ public interface LanguageDriver {
      * It is called during startup, when the mapped statement is read from a class or an xml file.
      *
      * @param configuration The MyBatis configuration
-     * @param script XNode parsed from a XML file
+     * @param script        XNode parsed from a XML file
      * @param parameterType input parameter type got from a mapper method or specified in the parameterType xml attribute. Can be null.
      * @return
      */
@@ -53,7 +60,7 @@ public interface LanguageDriver {
      * It is called during startup, when the mapped statement is read from a class or an xml file.
      *
      * @param configuration The MyBatis configuration
-     * @param script The content of the annotation
+     * @param script        The content of the annotation
      * @param parameterType input parameter type got from a mapper method or specified in the parameterType xml attribute. Can be null.
      * @return
      */

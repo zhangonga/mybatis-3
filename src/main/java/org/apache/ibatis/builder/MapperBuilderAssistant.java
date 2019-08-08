@@ -140,7 +140,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
         try {
             // 标记未解析
             unresolvedCacheRef = true;
-            // 获取 cache
+            // 通过 namespace 从 configuration 的 caches 中获取 cache
             Cache cache = configuration.getCache(namespace);
             // cache 为空抛出异常
             if (cache == null) {

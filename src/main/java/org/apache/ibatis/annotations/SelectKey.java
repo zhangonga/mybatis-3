@@ -29,22 +29,22 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 public @interface SelectKey {
     /**
-     * @return 语句
+     * @return 获取数据库主键值得语句
      */
     String[] statement();
 
     /**
-     * @return Java 对象的属性
+     * @return Java 对象对应的数据库主键的属性
      */
     String keyProperty();
 
     /**
-     * @return 数据库的字段
+     * @return 数据库主键字段
      */
     String keyColumn() default "";
 
     /**
-     * @return 在插入语句执行前，还是执行后
+     * @return 在插入语句执行前，还是执行后设置主键
      */
     boolean before();
 
