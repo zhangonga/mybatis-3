@@ -43,6 +43,7 @@ public class GenericTokenParser {
 
     /**
      * 解析 token
+     * 寻找 ${xxx}
      *
      * @param text
      * @return

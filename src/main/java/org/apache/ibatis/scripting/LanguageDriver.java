@@ -33,6 +33,7 @@ import org.apache.ibatis.session.Configuration;
 public interface LanguageDriver {
 
     /**
+     * 创建 ParameterHandler 对象。
      * Creates a {@link ParameterHandler} that passes the actual parameters to the the JDBC statement.
      *
      * @param mappedStatement The mapped statement that is being executed
@@ -45,6 +46,7 @@ public interface LanguageDriver {
     ParameterHandler createParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql);
 
     /**
+     * 从XML 文件创建 SqlSource
      * Creates an {@link SqlSource} that will hold the statement read from a mapper xml file.
      * It is called during startup, when the mapped statement is read from a class or an xml file.
      *
@@ -56,6 +58,7 @@ public interface LanguageDriver {
     SqlSource createSqlSource(Configuration configuration, XNode script, Class<?> parameterType);
 
     /**
+     * 从@Select 等注解中创建 SqlSource
      * Creates an {@link SqlSource} that will hold the statement read from an annotation.
      * It is called during startup, when the mapped statement is read from a class or an xml file.
      *
