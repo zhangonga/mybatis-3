@@ -24,6 +24,7 @@ import java.util.Map;
 
 /**
  * 实现 SqlSource 接口，动态的 SqlSource 实现类
+ * 适用于使用了 ${} 表达式的 SQL
  *
  * @author Clinton Begin
  */
@@ -51,11 +52,16 @@ public class DynamicSqlSource implements SqlSource {
         // 应用 rootSqlNode
         DynamicContext context = new DynamicContext(configuration, parameterObject);
         rootSqlNode.apply(context);
+        // 创建 SqlSourceBuilder 对象
         SqlSourceBuilder sqlSourceParser = new SqlSourceBuilder(configuration);
+        // 获取参数类型
         Class<?> parameterType = parameterObject == null ? Object.class : parameterObject.getClass();
+        // 构建 SqlSource，这里解析出来的，就是 staticSqlSource 了
         SqlSource sqlSource = sqlSourceParser.parse(context.getSql(), parameterType, context.getBindings());
+        // 获取 BoundSql
         BoundSql boundSql = sqlSource.getBoundSql(parameterObject);
         for (Map.Entry<String, Object> entry : context.getBindings().entrySet()) {
+            // 附加参数到 boundSql 中
             boundSql.setAdditionalParameter(entry.getKey(), entry.getValue());
         }
         return boundSql;
