@@ -41,9 +41,26 @@ public class TransactionalCache implements Cache {
 
     private static final Log log = LogFactory.getLog(TransactionalCache.class);
 
+    /**
+     * 委托的 Cache 对象。
+     * 实际上，就是二级缓存 Cache 对象。
+     */
     private final Cache delegate;
+    /**
+     * 提交时，清空 {@link #delegate}
+     * 初始时，该值为 false
+     * 清理后{@link #clear()} 时，该值为 true ，表示持续处于清空状态
+     */
     private boolean clearOnCommit;
+    /**
+     * 待提交的 KV 映射
+     * 在事务未提交时，entriesToAddOnCommit 属性，会暂存当前事务新产生的缓存 KV 对。
+     * 在事务提交时，entriesToAddOnCommit 属性，会同步到二级缓存 delegate 中。
+     */
     private final Map<Object, Object> entriesToAddOnCommit;
+    /**
+     * 查找不到的 KEY 集合
+     */
     private final Set<Object> entriesMissedInCache;
 
     public TransactionalCache(Cache delegate) {

@@ -568,12 +568,16 @@ public class Configuration {
     }
 
     public Executor newExecutor(Transaction transaction) {
+        // 设置默认的执行器为 SIMPLE 执行器
         return newExecutor(transaction, defaultExecutorType);
     }
 
     public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
+        // 获得执行器类型
         executorType = executorType == null ? defaultExecutorType : executorType;
         executorType = executorType == null ? ExecutorType.SIMPLE : executorType;
+
+        // 创建对应实现的 Executor 对象
         Executor executor;
         if (ExecutorType.BATCH == executorType) {
             executor = new BatchExecutor(this, transaction);
@@ -583,8 +587,10 @@ public class Configuration {
             executor = new SimpleExecutor(this, transaction);
         }
         if (cacheEnabled) {
+            // 如果开启缓存，创建 CachingExecutor 对象，进行包装
             executor = new CachingExecutor(executor);
         }
+        // 应用插件
         executor = (Executor) interceptorChain.pluginAll(executor);
         return executor;
     }
