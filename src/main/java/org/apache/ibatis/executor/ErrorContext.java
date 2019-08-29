@@ -26,11 +26,29 @@ public class ErrorContext {
     private static final ThreadLocal<ErrorContext> LOCAL = new ThreadLocal<>();
 
     private ErrorContext stored;
+    /**
+     * 存储异常存在于哪个资源文件中
+     */
     private String resource;
+    /**
+     * 存储异常是做什么操作时发生的
+     */
     private String activity;
+    /**
+     * 存储哪个对象操作时发生异常
+     */
     private String object;
+    /**
+     * 存储异常的概览信息
+     */
     private String message;
+    /**
+     * 存储发生日常的 SQL 语句
+     */
     private String sql;
+    /**
+     * 存储详细的 Java 异常日志
+     */
     private Throwable cause;
 
     private ErrorContext() {
@@ -45,6 +63,12 @@ public class ErrorContext {
         return context;
     }
 
+    /**
+     * stored 变量充当一个中介，在调用 store() 方法时将当前 ErrorContext 保存下来，
+     * 在调用 recall() 方法时将该 ErrorContext 实例传递给 LOCAL。
+     *
+     * @return
+     */
     public ErrorContext store() {
         ErrorContext newContext = new ErrorContext();
         newContext.stored = this;
@@ -90,6 +114,11 @@ public class ErrorContext {
         return this;
     }
 
+    /**
+     * 重置
+     *
+     * @return
+     */
     public ErrorContext reset() {
         resource = null;
         activity = null;
@@ -101,6 +130,11 @@ public class ErrorContext {
         return this;
     }
 
+    /**
+     * 拼接异常信息，最终打印用
+     *
+     * @return
+     */
     @Override
     public String toString() {
         StringBuilder description = new StringBuilder();
