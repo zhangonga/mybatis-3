@@ -57,25 +57,41 @@ public class SelectKeyGenerator implements KeyGenerator {
         }
     }
 
+    /**
+     * 处理主键
+     *
+     * @param executor
+     * @param ms
+     * @param parameter
+     */
     private void processGeneratedKeys(Executor executor, MappedStatement ms, Object parameter) {
         try {
+            // 有查询主键的 SQL 语句，即 keyStatement 对象非空
             if (parameter != null && keyStatement != null && keyStatement.getKeyProperties() != null) {
+
                 String[] keyProperties = keyStatement.getKeyProperties();
                 final Configuration configuration = ms.getConfiguration();
                 final MetaObject metaParam = configuration.newMetaObject(parameter);
                 if (keyProperties != null) {
                     // Do not close keyExecutor.
                     // The transaction will be closed by parent executor.
+                    // 创建执行器，类型为 SimpleExecutor
                     Executor keyExecutor = configuration.newExecutor(executor.getTransaction(), ExecutorType.SIMPLE);
+                    // 执行查询主键的操作
                     List<Object> values = keyExecutor.query(keyStatement, parameter, RowBounds.DEFAULT, Executor.NO_RESULT_HANDLER);
                     if (values.size() == 0) {
+                        // 查不到结果，抛出 ExecutorException 异常
                         throw new ExecutorException("SelectKey returned no data.");
                     } else if (values.size() > 1) {
+                        // 查询的结果过多，抛出 ExecutorException 异常
                         throw new ExecutorException("SelectKey returned more than one value.");
                     } else {
+                        // 创建 MetaObject 对象，访问查询主键的结果
                         MetaObject metaResult = configuration.newMetaObject(values.get(0));
                         if (keyProperties.length == 1) {
+                            // 单个主键
                             if (metaResult.hasGetter(keyProperties[0])) {
+                                // 设置属性到 metaParam 中，相当于设置到 parameter 中
                                 setValue(metaParam, keyProperties[0], metaResult.getValue(keyProperties[0]));
                             } else {
                                 // no getter for the property - maybe just a single value object
@@ -83,6 +99,8 @@ public class SelectKeyGenerator implements KeyGenerator {
                                 setValue(metaParam, keyProperties[0], values.get(0));
                             }
                         } else {
+                            // 多个主键
+                            // 遍历，进行赋值
                             handleMultipleProperties(keyProperties, metaParam, metaResult);
                         }
                     }
@@ -95,10 +113,18 @@ public class SelectKeyGenerator implements KeyGenerator {
         }
     }
 
+    /**
+     * 多主键设置值
+     *
+     * @param keyProperties
+     * @param metaParam
+     * @param metaResult
+     */
     private void handleMultipleProperties(String[] keyProperties,
                                           MetaObject metaParam, MetaObject metaResult) {
         String[] keyColumns = keyStatement.getKeyColumns();
 
+        // 遍历，进行赋值
         if (keyColumns == null || keyColumns.length == 0) {
             // no key columns specified, just use the property names
             for (String keyProperty : keyProperties) {
