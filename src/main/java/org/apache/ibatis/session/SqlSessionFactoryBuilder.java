@@ -45,9 +45,17 @@ public class SqlSessionFactoryBuilder {
         return build(reader, null, properties);
     }
 
+    /**
+     * 构建 SqlSession
+     *
+     * @param reader
+     * @param environment
+     * @param properties
+     * @return
+     */
     public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
         try {
-            // xml 配置的构造者
+            // XMLConfigBuilder 对象
             XMLConfigBuilder parser = new XMLConfigBuilder(reader, environment, properties);
             // 执行解析，返回 Configuration， 然后调用 build 方法进行 DefaultSqlSessionFactory 构造
             return build(parser.parse());
@@ -75,6 +83,14 @@ public class SqlSessionFactoryBuilder {
         return build(inputStream, null, properties);
     }
 
+    /**
+     * 和上边的那个的区别就是，这个是字节流，上边是字符流
+     *
+     * @param inputStream
+     * @param environment
+     * @param properties
+     * @return
+     */
     public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
         try {
             XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
