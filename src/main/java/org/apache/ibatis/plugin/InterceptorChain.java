@@ -28,6 +28,12 @@ public class InterceptorChain {
 
     private final List<Interceptor> interceptors = new ArrayList<>();
 
+    /**
+     * 拦截指定目录
+     *
+     * @param target
+     * @return
+     */
     public Object pluginAll(Object target) {
         for (Interceptor interceptor : interceptors) {
             target = interceptor.plugin(target);
@@ -35,6 +41,11 @@ public class InterceptorChain {
         return target;
     }
 
+    /**
+     * 添加拦截器
+     *
+     * @param interceptor
+     */
     public void addInterceptor(Interceptor interceptor) {
         interceptors.add(interceptor);
     }
