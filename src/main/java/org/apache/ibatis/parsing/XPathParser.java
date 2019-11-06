@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * 通过JDK的 XML 已经 SAX 包，解析出 Document
+ *
  * @author Clinton Begin
  * @author Kazuki Shimizu
  * @author zhanggong

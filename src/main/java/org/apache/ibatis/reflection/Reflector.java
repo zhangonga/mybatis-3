@@ -451,6 +451,7 @@ public class Reflector {
     private void addUniqueMethods(Map<String, Method> uniqueMethods, Method[] methods) {
         for (Method currentMethod : methods) {
             // 判断当前方法是否是桥接方法，桥接方法是jvm为了兼容泛型而自动生成的方法，它是把泛型编译的Object类型，转成泛型的具体类型的方法。
+            // 泛型为了兼容，会把泛型转成 Object ，然后在具体的类里，增加一个 Object 参数的方法，转成具体的类型，这个方法就是 bridge 的
             if (!currentMethod.isBridge()) {
                 String signature = getSignature(currentMethod);
                 // 如果有了那一定是重写了，但是遍历方法是从当前类往父类遍历的，所以不用替换。

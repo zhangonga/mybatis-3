@@ -120,6 +120,7 @@ public class Plugin implements InvocationHandler {
         for (Signature sig : sigs) {
             Set<Method> methods = signatureMap.computeIfAbsent(sig.type(), k -> new HashSet<>());
             try {
+                // 根据Signature 的 type 的类，获取方法，不同的参数，获取不同的方法，放入缓存中
                 Method method = sig.type().getMethod(sig.method(), sig.args());
                 methods.add(method);
             } catch (NoSuchMethodException e) {

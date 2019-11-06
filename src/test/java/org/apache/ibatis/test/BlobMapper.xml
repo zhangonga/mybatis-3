@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.apache.ibatis.test.BlobMapper">
+    <parameterMap id="selectById" type="org.apache.ibatis.test.BlobRecord">
+        <parameter property="id" />
+    </parameterMap>
+
+    <resultMap type="org.apache.ibatis.test.BlobRecord" id="blobRecordResult">
+        <constructor>
+            <idArg column="id" javaType="_int"/>
+            <arg column="blob" javaType="_byte[]"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap type="org.apache.ibatis.test.BlobRecord" id="blobRecordResultWithBlobObjects">
+        <constructor>
+            <idArg column="id" javaType="_int"/>
+            <arg column="blob" javaType="Byte[]"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.apache.ibatis.test.BlobRecord">
+      insert into blobtest.blobs values (#{id}, #{blob})
+    </insert>
+
+    <select id="selectById" parameterMap="selectById" resultMap="blobRecordResult">
+      select * from blobtest.blobs where id = ?
+    </select>
+
+    <select id="selectAll" resultMap="blobRecordResult">
+      select * from blobtest.blobs
+    </select>
+
+    <select id="selectAllWithBlobObjects" resultMap="blobRecordResultWithBlobObjects">
+      select * from blobtest.blobs
+    </select>
+</mapper>
